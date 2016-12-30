@@ -1,0 +1,39 @@
+System:
+  data_dir: '/var/spoofdog/'
+
+Projects:
+
+  blumental:
+    human_name: 'Blumentál'
+    class_name: 'Blumental'
+    active: True
+
+  ceresne:
+    human_name: 'Čerešne'
+    class_name: 'Ceresne'
+    active: True
+
+  myto:
+    human_name: 'Pri mýte'
+    class_name: 'Myto'
+    active: True
+
+  perla:
+    human_name: 'Perla Ružinova'
+    class_name: 'Perla'
+    active: False
+
+  slnecnice:
+    human_name: 'Slnečnice'
+    class_name: 'Slnecnice'
+    active: True
+
+  stein:
+    human_name: 'Stein'
+    class_name: 'Stein'
+    active: False
+
+  zuckermandel:
+    human_name: 'Zuckermandel'
+    class_name: 'Zuckermandel'
+    active: True
