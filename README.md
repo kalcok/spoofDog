@@ -5,6 +5,9 @@ This tool is meant to regulary scrape web pages of real estate development proje
 
 Program has two main parts, scraper that does actual data collection and web interface (work in progress) that provides visualization of collected data.
 
+## Collector
+To collect data from all projects that are currently set as `active` in `config.yml`, run `collector/collector.py` script. This should be done regulary to yeild meaningfull results.
+
 ## Extensibility
 Web scraper (in collector subdirectory) is designed to be modular for easy extensibility to include new real estate projects. To create module for new project, look for existing examples in `estate_modules` directory. There you need to to create new `.py` file that contains class inheriting from `RealEstate`.
 Your new class must override `get_data` method that fills `self.data` dictionary with flat identificators (keys) and information about their availability (values). To preserve consistency between multiple projects, data in final dictionary should follow unified scheme when indicating availability. `RealEstate` class contains constans that help with this:
