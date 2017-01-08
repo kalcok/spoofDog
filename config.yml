@@ -1,6 +1,11 @@
 System:
   data_dir: '/var/spoofdog/'
 
+  logging:
+    active: True
+    file: '/var/log/spoofdog.log'
+    level: 'info'
+
 Projects:
 
   blumental:

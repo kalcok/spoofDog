@@ -1,3 +1,6 @@
+import logging
+
+
 class RealEstate(object):
     """
     Base class for creating estate modules that collect data prom specific real estate projects. Inherited classes
@@ -23,6 +26,7 @@ class RealEstate(object):
         variable
         """
         self.data = {}
+        self.logger = logging.getLogger("spoofDog.collector.{0}".format(self.estate_name))
 
     def get_data(self):
         """
