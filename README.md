@@ -20,3 +20,9 @@ After creation of new module, it must be added to config file (`config.yml`) as 
  * `human_name` - Name of the real estate project presented via web interface. (Reserved for future use)
  * `class_name` - Name of the class in the new module
  * `active` - (True/False) indicates whether this project is active and should be scraped when `collector` is run.
+
+## Caveats
+Curently there is no installer to properly setup all needed files and directories with proper permissions. Following must be manually created.
+
+* log file - This file is defined in config file, `System:logging:file`. If you intend to use file logging you must ensure that this file is writable by user running spoofDog.
+* data directory - Spoofdog collects its results into files inside data directory defined in config file, System:data_dir. You must ensure that this directory exists and is writable by user running spoofDog
