@@ -3,6 +3,7 @@ import importlib
 import simplejson
 import os
 import logging
+from tools import MailNotificator
 
 from datetime import datetime
 
@@ -12,12 +13,18 @@ with open('{0}/config.yml'.format(project_root)) as f:
     cfg = yaml.load(f)
 
 log_cfg = cfg.get("System").get("logging")
+log_mailer_cfg = log_cfg.get('mail_notification')
 logger = logging.getLogger("spoofDog.collector")
 
 if log_cfg.get('active'):
-    handler = logging.FileHandler(log_cfg.get('file'))
-    handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-    logger.addHandler(handler)
+    log_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    file_handler = logging.FileHandler(log_cfg.get('file'))
+    file_handler.setFormatter(log_format)
+    logger.addHandler(file_handler)
+    if log_mailer_cfg.get('active'):
+        mail_handler = MailNotificator(log_mailer_cfg.get('mail_to'), log_mailer_cfg.get('from'))
+        mail_handler.setFormatter(log_format)
+        logger.addHandler(mail_handler)
     level = log_cfg.get('level').lower()
     if level == 'critical':
         logger.setLevel(logging.CRITICAL)
@@ -58,5 +65,10 @@ def main():
         except IOError:
             logger.critical('Writing data into {0} failed. Aborting all scheduled scrapings.'.format(data_dir))
             break
+
+    mailers = [ml for ml in logger.handlers if isinstance(ml, MailNotificator)]
+    for m in mailers:
+        m.notify()
+
 
 main()

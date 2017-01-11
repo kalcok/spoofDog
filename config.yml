@@ -6,6 +6,11 @@ System:
     file: '/var/log/spoofdog.log'
     level: 'info'
 
+    mail_notification:
+      active: False
+      mail_to: 'foo@example.org'
+      from: 'bar@example.org'
+
 Projects:
 
   blumental:
