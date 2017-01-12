@@ -30,7 +30,7 @@ class Slnecnice(RealEstate):
             rows = table_body.find_all("tr")
             for row in rows:
                 cells = row.find_all("td")
-                self.data[cells[3].get_text()] = self.translate(cells[12].get_text())
+                self.data[cells[3].get_text()] = {'availability': self.translate(cells[12].get_text()), 'price': None}
 
     def translate(self, flat_status):
         flat_status = unicode(flat_status.lower())

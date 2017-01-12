@@ -25,7 +25,7 @@ class Blumental(RealEstate):
             rows = bodies.find_all('tr')
             for row in rows:
                 cells = row.find_all('td')
-                self.data[cells[1].get_text()] = self.translate(cells[8].get_text())
+                self.data[cells[1].get_text()] = {'availability': self.translate(cells[8].get_text()), 'price': None}
 
     def translate(self, flat_status):
         if flat_status == 'Available':

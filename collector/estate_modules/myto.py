@@ -20,7 +20,7 @@ class Myto(RealEstate):
 
         for row in rows:
             cells = row.find_all('td')
-            self.data[cells[0].get_text()] = self.translate(cells[10].get_text())
+            self.data[cells[0].get_text()] = {'availability': self.translate(cells[10].get_text()), 'price': None}
 
     def translate(self, flat_status):
         flat_status = unicode(flat_status.lower())

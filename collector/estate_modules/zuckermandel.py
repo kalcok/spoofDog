@@ -18,7 +18,7 @@ class Zuckermandel(RealEstate):
         for flat in flat_data:
             name = '{0}{1}{2}{3}'.format(flat['block'], flat['entrance'], flat['floor'], flat['flat_no'])
             status = flat['status']
-            self.data[name] = self.translate(status)
+            self.data[name] = {'availability': self.translate(status), 'price': None}
 
     def translate(self, flat_status):
         if flat_status == '0':

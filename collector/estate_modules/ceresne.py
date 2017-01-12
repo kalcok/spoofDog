@@ -15,7 +15,7 @@ class Ceresne(RealEstate):
         flat_list = ceresne_data.get('data')
 
         for flat in flat_list:
-            self.data[flat[2]] = self.translate(flat[12])
+            self.data[flat[2]] = { 'availability': self.translate(flat[12]), 'price': None}
 
     def translate(self, flat_status):
         if flat_status == 'V':
