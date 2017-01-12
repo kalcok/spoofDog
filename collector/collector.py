@@ -3,7 +3,7 @@ import importlib
 import simplejson
 import os
 import logging
-from tools import MailNotificator
+from tools import MailNotificator, init_data_file
 
 from datetime import datetime
 
@@ -49,22 +49,36 @@ def main():
 
     data_dir = system_conf.get('data_dir')
 
-    active_projects = {k:v for (k, v) in cfg.get('Projects').iteritems() if v.get('active') }
+    active_projects = {k: v for (k, v) in cfg.get('Projects').iteritems() if v.get('active')}
     logger.debug('Projects scheduled for scraping: {0}'.format(active_projects.keys()))
+    today = datetime.today()
+    timestamp = '{0}-{1}-{2}'.format(today.year, today.month, today.day)
 
     for project, details in active_projects.iteritems():
         project_module = importlib.import_module('estate_modules.{0}'.format(project))
         project_parser = getattr(project_module, details['class_name'])()
 
         project_parser.get_data()
+
+        data_file_path = '{0}/{1}.json'.format(data_dir, project)
+
         try:
-            today = datetime.today()
-            with open('{0}/{1}_{2}-{3}-{4}'.format(data_dir, project, today.year, today.month, today.day), 'w') as f:
-                simplejson.dump(project_parser.data, f)
+            if not os.path.isfile(data_file_path):
+                init_data_file(data_file_path, project, project_parser.pretty_name)
+
+            with open(data_file_path, 'r+') as f:
+                data_json = simplejson.load(f)
+                f.seek(0)
+                data_json['data'].update({timestamp: project_parser.data})
+                simplejson.dump(data_json, f)
+                f.truncate()
             logger.info('{0} scraped successfully.'.format(project))
         except IOError:
-            logger.critical('Writing data into {0} failed. Aborting all scheduled scrapings.'.format(data_dir))
+            logger.critical('Writing data into {0} failed. Aborting all scheduled scrapings.'.format(data_file_path))
             break
+        except ValueError as e:
+            logger.error(
+                'Failed to read JSON datafile {0}, skipping "{1}". Error: {2}'.format(data_file_path, project, e))
 
     mailers = [ml for ml in logger.handlers if isinstance(ml, MailNotificator)]
     for m in mailers:

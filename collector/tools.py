@@ -1,6 +1,7 @@
 from logging import Handler, NOTSET
 from email.mime.text import MIMEText
 from subprocess import Popen, PIPE
+import simplejson
 
 
 class MailNotificator(Handler):
@@ -31,3 +32,9 @@ class MailNotificator(Handler):
         p = Popen(["/usr/sbin/sendmail", "-t", "-oi"], stdin=PIPE)
         p.communicate(body.as_string())
         self.buffer = ''
+
+
+def init_data_file(file_path, project, pretty_name):
+    init_dict = {'project': project, 'pretty_name': pretty_name, 'data': {}}
+    with open(file_path, 'w+') as file_:
+        simplejson.dump(init_dict, file_)
